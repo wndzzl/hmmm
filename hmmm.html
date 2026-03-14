@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт 5-2 класса</title>
+    <style>
+        /* Базовые сбросы и общие стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Основной контейнер сайта */
+        .site-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 80vh;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Левая панель меню */
+        .menu-panel {
+            width: 250px;
+            background-color: white;
+            border-right: 2px solid #e0e0e0; /* небольшая черта */
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Стили для кнопок меню */
+        .menu-btn {
+            background: none;
+            border: none;
+            padding: 15px 25px;
+            text-align: left;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .menu-btn:hover {
+            background-color: #f0f0f0;
+            border-left-color: #4CAF50;
+        }
+
+        .menu-btn.active {
+            background-color: #e8f5e9;
+            border-left-color: #4CAF50;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        /* Правая область контента */
+        .content-panel {
+            flex: 1;
+            padding: 40px;
+            background-color: #fafafa;
+            overflow-y: auto;
+        }
+
+        /* Стили для текста внутри контента */
+        .content-text {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #444;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 768px) {
+            .site-container {
+                flex-direction: column;
+                height: auto;
+            }
+            .menu-panel {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+            .menu-btn {
+                flex: 1 1 auto;
+                text-align: center;
+                border-left: none;
+                border-bottom: 4px solid transparent;
+            }
+            .menu-btn:hover {
+                border-left-color: transparent;
+                border-bottom-color: #4CAF50;
+            }
+            .menu-btn.active {
+                border-left-color: transparent;
+                border-bottom-color: #4CAF50;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="site-container">
+    <!-- Левое меню -->
+    <div class="menu-panel">
+        <button class="menu-btn active" data-page="home">Главная страница</button>
+        <button class="menu-btn" data-page="news">Новости</button>
+        <button class="menu-btn" data-page="events">События</button>
+        <button class="menu-btn" data-page="schedule">Расписание</button>
+    </div>
+
+    <!-- Правая область с контентом -->
+    <div class="content-panel">
+        <div class="content-text" id="content">
+            <!-- Сюда будет подставляться текст -->
+            Добро пожаловать на сайт класса 5-2! Пока здесь ничего нету, но со временем будет появляться все больше!
+        </div>
+    </div>
+</div>
+
+<script>
+    // Объект с текстами для каждой страницы
+    const pageContent = {
+        home: 'Добро пожаловать на сайт класса 5-2! Пока здесь ничего нету, но со временем будет появляться все больше!',
+        news: 'Тут пока ничего нету...',
+        events: 'Тут пока ничего нету...',
+        schedule: 'Тут пока ничего нету...'
+    };
+
+    // Получаем все кнопки меню и элемент контента
+    const menuButtons = document.querySelectorAll('.menu-btn');
+    const contentDiv = document.getElementById('content');
+
+    // Функция для переключения страницы
+    function switchPage(pageId) {
+        // Меняем текст контента
+        contentDiv.textContent = pageContent[pageId];
+
+        // Убираем класс active у всех кнопок
+        menuButtons.forEach(btn => btn.classList.remove('active'));
+
+        // Добавляем класс active кнопке, соответствующей текущей странице
+        const activeButton = Array.from(menuButtons).find(btn => btn.dataset.page === pageId);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+    }
+
+    // Навешиваем обработчики на каждую кнопку
+    menuButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const pageId = this.dataset.page; // получаем значение data-page
+            switchPage(pageId);
+        });
+    });
+
+    // При загрузке страницы убедимся, что активна главная (уже активна по HTML)
+    // Но на всякий случай синхронизируем контент (если вдруг изменится)
+    // Можно не вызывать, так как в HTML уже стоит текст главной и активный класс.
+    // Однако если захотим, чтобы всегда при обновлении страницы была главная:
+    // switchPage('home');
+</script>
+</body>
+</html>
